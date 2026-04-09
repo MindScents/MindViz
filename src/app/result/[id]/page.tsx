@@ -1,4 +1,5 @@
 import { notFound } from "next/navigation";
+import { getResult } from "@/lib/db";
 import type { Ingredient } from "@/types";
 
 const NOTE_LABELS: Record<string, string> = {
@@ -13,41 +14,13 @@ const NOTE_COLORS: Record<string, string> = {
   base: "#8B7355",
 };
 
-interface CompactPayload {
-  p: string; // perfume_name
-  i: { n: string; v: number; t: "top" | "middle" | "base" }[]; // ingredients
-  u: string; // user_name
-  e: string; // user_email
-}
-
-function decodeResult(id: string) {
-  try {
-    const json = Buffer.from(id, "base64url").toString("utf8");
-    const data: CompactPayload = JSON.parse(json);
-    return {
-      perfume_name: data.p,
-      ingredients: data.i.map(
-        (item): Ingredient => ({
-          name: item.n,
-          percentage: item.v,
-          note: item.t,
-        })
-      ),
-      user_name: data.u,
-      user_email: data.e,
-    };
-  } catch {
-    return null;
-  }
-}
-
 export default async function ResultPage({
   params,
 }: {
   params: Promise<{ id: string }>;
 }) {
   const { id } = await params;
-  const record = decodeResult(id);
+  const record = await getResult(id);
 
   if (!record) return notFound();
 
