@@ -14,7 +14,7 @@ type AppState = "upload" | "visualize";
 export default function Home() {
   const [appState, setAppState] = useState<AppState>("upload");
   const [uploading, setUploading] = useState(false);
-  const [sessionId, setSessionId] = useState<string>("");
+  const [filename, setFilename] = useState<string>("");
   const [stream, setStream] = useState<EEGStream | null>(null);
   const [selectedChannels, setSelectedChannels] = useState<Set<string>>(
     new Set()
@@ -35,7 +35,7 @@ export default function Home() {
         throw new Error(err.detail || "Upload failed");
       }
       const data = await res.json();
-      setSessionId(data.session_id);
+      setFilename(file.name);
       const firstStream = data.streams[0];
       setStream(firstStream);
       setSelectedChannels(new Set(firstStream.ch_names));
@@ -55,7 +55,7 @@ export default function Home() {
       const res = await fetch("/api/analyze", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ session_id: sessionId }),
+        body: JSON.stringify({ filename }),
       });
       if (!res.ok) {
         const err = await res.json();
@@ -69,7 +69,7 @@ export default function Home() {
     } finally {
       setAnalyzing(false);
     }
-  }, [sessionId]);
+  }, [filename]);
 
   const toggleChannel = (ch: string) => {
     setSelectedChannels((prev) => {
@@ -122,7 +122,7 @@ export default function Home() {
             onClick={() => {
               setAppState("upload");
               setStream(null);
-              setSessionId("");
+              setFilename("");
               setSelectedChannels(new Set());
               setResult(null);
               setModalVisible(false);

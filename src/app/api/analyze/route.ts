@@ -1,8 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createHash } from "crypto";
 
-import { sessions } from "@/lib/sessions";
-
 const INGREDIENTS = [
   { name: "Bergamot", note: "top" as const },
   { name: "Sweet Orange", note: "top" as const },
@@ -31,16 +29,14 @@ function createRng(seed: number) {
 
 export async function POST(request: NextRequest) {
   const body = await request.json();
-  const sessionId = body.session_id;
+  const filename = body.filename;
 
-  if (!sessionId || !sessions.has(sessionId)) {
+  if (!filename) {
     return NextResponse.json(
-      { detail: "Invalid session" },
+      { detail: "Filename is required" },
       { status: 400 }
     );
   }
-
-  const { filename } = sessions.get(sessionId)!;
 
   // Deterministic seed from filename
   const hash = createHash("md5").update(filename).digest("hex");

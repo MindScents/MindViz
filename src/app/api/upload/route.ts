@@ -1,7 +1,4 @@
 import { NextRequest, NextResponse } from "next/server";
-import { randomUUID } from "crypto";
-
-import { sessions } from "@/lib/sessions";
 import { parseXdf } from "@/lib/parse-xdf";
 
 export async function POST(request: NextRequest) {
@@ -26,10 +23,7 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const sessionId = randomUUID();
-    sessions.set(sessionId, { filename: file.name });
-
-    return NextResponse.json({ session_id: sessionId, streams });
+    return NextResponse.json({ streams });
   } catch (e: any) {
     return NextResponse.json(
       { detail: `Failed to parse XDF: ${e.message}` },
