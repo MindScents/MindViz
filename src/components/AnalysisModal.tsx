@@ -118,6 +118,34 @@ export default function AnalysisModal({ visible, result, onClose }: Props) {
   };
 
   return (
+    <>
+      <style>{`
+        .analysis-modal-content::-webkit-scrollbar {
+          width: 6px;
+        }
+        .analysis-modal-content::-webkit-scrollbar-track {
+          background: transparent;
+        }
+        .analysis-modal-content::-webkit-scrollbar-thumb {
+          background: #D5CBBB;
+          border-radius: 3px;
+        }
+        .analysis-modal-content::-webkit-scrollbar-thumb:hover {
+          background: #C0B3A0;
+        }
+        .analysis-modal-content {
+          scrollbar-width: thin;
+          scrollbar-color: #D5CBBB transparent;
+        }
+        @keyframes pulse {
+          0% { transform: scale(0.5); opacity: 0.6; }
+          100% { transform: scale(1.8); opacity: 0; }
+        }
+        @keyframes glow {
+          0% { opacity: 0.15; transform: scale(0.9); }
+          100% { opacity: 0.35; transform: scale(1.1); }
+        }
+      `}</style>
     <motion.div
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
@@ -137,11 +165,12 @@ export default function AnalysisModal({ visible, result, onClose }: Props) {
         initial={{ scale: 0.9, opacity: 0 }}
         animate={{ scale: 1, opacity: 1 }}
         transition={{ type: "spring", damping: 25 }}
+        className="analysis-modal-content"
         style={{
           background: "var(--card-bg)",
           borderRadius: 16,
           padding: "48px 40px",
-          maxWidth: 460,
+          maxWidth: "min(90vw, 560px)",
           width: "90%",
           maxHeight: "85vh",
           overflowY: "auto",
@@ -198,16 +227,6 @@ export default function AnalysisModal({ visible, result, onClose }: Props) {
               >
                 {SCAN_TEXTS[scanIndex]}
               </p>
-              <style>{`
-                @keyframes pulse {
-                  0% { transform: scale(0.5); opacity: 0.6; }
-                  100% { transform: scale(1.8); opacity: 0; }
-                }
-                @keyframes glow {
-                  0% { opacity: 0.15; transform: scale(0.9); }
-                  100% { opacity: 0.35; transform: scale(1.1); }
-                }
-              `}</style>
             </motion.div>
           ) : (
             <motion.div
@@ -448,5 +467,6 @@ export default function AnalysisModal({ visible, result, onClose }: Props) {
         </AnimatePresence>
       </motion.div>
     </motion.div>
+    </>
   );
 }
