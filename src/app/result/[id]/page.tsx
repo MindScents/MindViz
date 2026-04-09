@@ -45,7 +45,7 @@ export default async function ResultPage({
           background: "var(--card-bg)",
           borderRadius: 16,
           padding: "48px 40px",
-          maxWidth: 480,
+          maxWidth: "min(90vw, 560px)",
           width: "100%",
           boxShadow: "0 4px 32px rgba(0,0,0,0.06)",
         }}
