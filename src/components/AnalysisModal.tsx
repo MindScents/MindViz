@@ -254,6 +254,67 @@ export default function AnalysisModal({ visible, result, onClose }: Props) {
                 ))}
               </div>
 
+              {/* Fragrance Structure & Functional Design */}
+              <div
+                style={{
+                  marginTop: 24,
+                  display: "grid",
+                  gridTemplateColumns: "1fr 1fr",
+                  gap: 12,
+                }}
+              >
+                <div
+                  style={{
+                    padding: "16px",
+                    background: "#FDFBF7",
+                    borderRadius: 10,
+                  }}
+                >
+                  <p
+                    style={{
+                      fontSize: 11,
+                      textTransform: "uppercase",
+                      letterSpacing: 1.2,
+                      color: "var(--text-secondary)",
+                      marginBottom: 10,
+                      fontWeight: 500,
+                    }}
+                  >
+                    Fragrance Structure
+                  </p>
+                  <div style={{ fontSize: 12, lineHeight: 2, color: "var(--text-primary)" }}>
+                    <div><span style={{ color: "#E8C47C", fontWeight: 500 }}>Top:</span> Bergamot, Sweet Orange</div>
+                    <div><span style={{ color: "#C9A46B", fontWeight: 500 }}>Heart:</span> Lavender, Clary Sage</div>
+                    <div><span style={{ color: "#8B7355", fontWeight: 500 }}>Base:</span> Ylang-Ylang</div>
+                  </div>
+                </div>
+                <div
+                  style={{
+                    padding: "16px",
+                    background: "#FDFBF7",
+                    borderRadius: 10,
+                  }}
+                >
+                  <p
+                    style={{
+                      fontSize: 11,
+                      textTransform: "uppercase",
+                      letterSpacing: 1.2,
+                      color: "var(--text-secondary)",
+                      marginBottom: 10,
+                      fontWeight: 500,
+                    }}
+                  >
+                    Functional Design
+                  </p>
+                  <div style={{ fontSize: 12, lineHeight: 2, color: "var(--text-primary)" }}>
+                    <div>Citrus notes &rarr; reduce mental tension</div>
+                    <div>Lavender &amp; sage &rarr; parasympathetic activation</div>
+                    <div>Ylang-ylang &rarr; stabilize emotional baseline</div>
+                  </div>
+                </div>
+              </div>
+
               {/* User info & QR code section */}
               <div
                 style={{

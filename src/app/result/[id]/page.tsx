@@ -1,5 +1,6 @@
 import { notFound } from "next/navigation";
 import { getResult } from "@/lib/db";
+import { INGREDIENT_INFO } from "@/lib/ingredients";
 import type { Ingredient } from "@/types";
 
 const NOTE_LABELS: Record<string, string> = {
@@ -88,69 +89,192 @@ export default async function ResultPage({
         </div>
 
         {/* Ingredients */}
-        <div style={{ marginBottom: 32 }}>
-          {sorted.map((ing: Ingredient) => (
-            <div
-              key={ing.name}
-              style={{
-                display: "flex",
-                alignItems: "center",
-                gap: 16,
-                padding: "16px 20px",
-                background: "#FDFBF7",
-                borderRadius: 10,
-                marginBottom: 8,
-              }}
-            >
-              <div style={{ flex: 1 }}>
-                <div
-                  style={{ fontSize: 15, fontWeight: 400, marginBottom: 4 }}
-                >
-                  {ing.name}
-                </div>
-                <div
-                  style={{
-                    fontSize: 11,
-                    color: NOTE_COLORS[ing.note],
-                    textTransform: "uppercase",
-                    letterSpacing: 1,
-                  }}
-                >
-                  {NOTE_LABELS[ing.note]}
-                </div>
-              </div>
-              <div style={{ width: 120, marginRight: 12 }}>
-                <div
-                  style={{
-                    height: 6,
-                    background: "#F0EBE0",
-                    borderRadius: 3,
-                    overflow: "hidden",
-                  }}
-                >
-                  <div
-                    style={{
-                      width: `${ing.percentage}%`,
-                      height: "100%",
-                      background: NOTE_COLORS[ing.note],
-                      borderRadius: 3,
-                    }}
-                  />
-                </div>
-              </div>
+        <div style={{ marginBottom: 24 }}>
+          {sorted.map((ing: Ingredient) => {
+            const info = INGREDIENT_INFO[ing.name];
+            return (
               <div
+                key={ing.name}
                 style={{
-                  fontSize: 14,
-                  fontWeight: 400,
-                  color: "var(--text-secondary)",
-                  minWidth: 36,
-                  textAlign: "right",
+                  padding: "16px 20px",
+                  background: "#FDFBF7",
+                  borderRadius: 10,
+                  marginBottom: 8,
                 }}
               >
-                {ing.percentage}%
+                <div
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    gap: 16,
+                  }}
+                >
+                  <div style={{ flex: 1 }}>
+                    <div
+                      style={{
+                        fontSize: 15,
+                        fontWeight: 400,
+                        marginBottom: 2,
+                      }}
+                    >
+                      {ing.name}
+                      {info && (
+                        <span
+                          style={{
+                            fontSize: 12,
+                            color: NOTE_COLORS[ing.note],
+                            marginLeft: 8,
+                            fontWeight: 300,
+                            fontStyle: "italic",
+                          }}
+                        >
+                          {info.subtitle}
+                        </span>
+                      )}
+                    </div>
+                    <div
+                      style={{
+                        fontSize: 11,
+                        color: NOTE_COLORS[ing.note],
+                        textTransform: "uppercase",
+                        letterSpacing: 1,
+                      }}
+                    >
+                      {NOTE_LABELS[ing.note]}
+                    </div>
+                  </div>
+                  <div style={{ width: 120, marginRight: 12 }}>
+                    <div
+                      style={{
+                        height: 6,
+                        background: "#F0EBE0",
+                        borderRadius: 3,
+                        overflow: "hidden",
+                      }}
+                    >
+                      <div
+                        style={{
+                          width: `${ing.percentage}%`,
+                          height: "100%",
+                          background: NOTE_COLORS[ing.note],
+                          borderRadius: 3,
+                        }}
+                      />
+                    </div>
+                  </div>
+                  <div
+                    style={{
+                      fontSize: 14,
+                      fontWeight: 400,
+                      color: "var(--text-secondary)",
+                      minWidth: 36,
+                      textAlign: "right",
+                    }}
+                  >
+                    {ing.percentage}%
+                  </div>
+                </div>
+                {info && (
+                  <p
+                    style={{
+                      fontSize: 12,
+                      lineHeight: 1.6,
+                      color: "var(--text-secondary)",
+                      marginTop: 8,
+                    }}
+                  >
+                    {info.description}
+                  </p>
+                )}
+              </div>
+            );
+          })}
+        </div>
+
+        {/* Fragrance Structure & Functional Design */}
+        <div
+          style={{
+            display: "grid",
+            gridTemplateColumns: "1fr 1fr",
+            gap: 12,
+            marginBottom: 32,
+          }}
+        >
+          <div
+            style={{
+              padding: 16,
+              background: "#FDFBF7",
+              borderRadius: 10,
+            }}
+          >
+            <p
+              style={{
+                fontSize: 11,
+                textTransform: "uppercase",
+                letterSpacing: 1.2,
+                color: "var(--text-secondary)",
+                marginBottom: 10,
+                fontWeight: 500,
+              }}
+            >
+              Fragrance Structure
+            </p>
+            <div
+              style={{
+                fontSize: 12,
+                lineHeight: 2,
+                color: "var(--text-primary)",
+              }}
+            >
+              <div>
+                <span style={{ color: "#E8C47C", fontWeight: 500 }}>Top:</span>{" "}
+                Bergamot, Sweet Orange
+              </div>
+              <div>
+                <span style={{ color: "#C9A46B", fontWeight: 500 }}>
+                  Heart:
+                </span>{" "}
+                Lavender, Clary Sage
+              </div>
+              <div>
+                <span style={{ color: "#8B7355", fontWeight: 500 }}>
+                  Base:
+                </span>{" "}
+                Ylang-Ylang
               </div>
             </div>
-          ))}
+          </div>
+          <div
+            style={{
+              padding: 16,
+              background: "#FDFBF7",
+              borderRadius: 10,
+            }}
+          >
+            <p
+              style={{
+                fontSize: 11,
+                textTransform: "uppercase",
+                letterSpacing: 1.2,
+                color: "var(--text-secondary)",
+                marginBottom: 10,
+                fontWeight: 500,
+              }}
+            >
+              Functional Design
+            </p>
+            <div
+              style={{
+                fontSize: 12,
+                lineHeight: 2,
+                color: "var(--text-primary)",
+              }}
+            >
+              <div>Citrus notes &rarr; reduce mental tension</div>
+              <div>Lavender &amp; sage &rarr; parasympathetic activation</div>
+              <div>Ylang-ylang &rarr; stabilize emotional baseline</div>
+            </div>
+          </div>
         </div>
 
         {/* Footer */}
