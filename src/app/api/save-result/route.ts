@@ -1,6 +1,4 @@
 import { NextRequest, NextResponse } from "next/server";
-import { randomUUID } from "crypto";
-import { saveResult } from "@/lib/db";
 import type { SaveResultRequest } from "@/types";
 
 export async function POST(request: NextRequest) {
@@ -20,17 +18,20 @@ export async function POST(request: NextRequest) {
     );
   }
 
-  const id = randomUUID();
-  const origin = request.headers.get("origin") || request.nextUrl.origin;
-
-  await saveResult({
-    id,
-    perfume_name: body.perfume_name,
-    ingredients: body.ingredients,
-    user_name: body.user_name.trim(),
-    user_email: body.user_email.trim(),
-    created_at: new Date().toISOString(),
+  // Encode all data into the URL itself — no database needed, links never expire
+  const payload = JSON.stringify({
+    p: body.perfume_name,
+    i: body.ingredients.map((ing) => ({
+      n: ing.name,
+      v: ing.percentage,
+      t: ing.note,
+    })),
+    u: body.user_name.trim(),
+    e: body.user_email.trim(),
   });
+
+  const id = Buffer.from(payload).toString("base64url");
+  const origin = request.headers.get("origin") || request.nextUrl.origin;
 
   return NextResponse.json({
     id,

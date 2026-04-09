@@ -1,4 +1,3 @@
-import { getResult } from "@/lib/db";
 import { notFound } from "next/navigation";
 import type { Ingredient } from "@/types";
 
@@ -14,13 +13,41 @@ const NOTE_COLORS: Record<string, string> = {
   base: "#8B7355",
 };
 
+interface CompactPayload {
+  p: string; // perfume_name
+  i: { n: string; v: number; t: "top" | "middle" | "base" }[]; // ingredients
+  u: string; // user_name
+  e: string; // user_email
+}
+
+function decodeResult(id: string) {
+  try {
+    const json = Buffer.from(id, "base64url").toString("utf8");
+    const data: CompactPayload = JSON.parse(json);
+    return {
+      perfume_name: data.p,
+      ingredients: data.i.map(
+        (item): Ingredient => ({
+          name: item.n,
+          percentage: item.v,
+          note: item.t,
+        })
+      ),
+      user_name: data.u,
+      user_email: data.e,
+    };
+  } catch {
+    return null;
+  }
+}
+
 export default async function ResultPage({
   params,
 }: {
   params: Promise<{ id: string }>;
 }) {
   const { id } = await params;
-  const record = await getResult(id);
+  const record = decodeResult(id);
 
   if (!record) return notFound();
 
@@ -82,7 +109,8 @@ export default async function ResultPage({
               color: "var(--text-secondary)",
             }}
           >
-            Crafted for <strong style={{ fontWeight: 500 }}>{record.user_name}</strong>
+            Crafted for{" "}
+            <strong style={{ fontWeight: 500 }}>{record.user_name}</strong>
           </div>
         </div>
 
@@ -102,7 +130,9 @@ export default async function ResultPage({
               }}
             >
               <div style={{ flex: 1 }}>
-                <div style={{ fontSize: 15, fontWeight: 400, marginBottom: 4 }}>
+                <div
+                  style={{ fontSize: 15, fontWeight: 400, marginBottom: 4 }}
+                >
                   {ing.name}
                 </div>
                 <div
