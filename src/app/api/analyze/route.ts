@@ -9,12 +9,7 @@ const INGREDIENTS = [
   { name: "Ylang-Ylang", note: "base" as const },
 ];
 
-const PERFUME_NAMES = [
-  "Neural Bloom", "Cortex Whisper", "Synapse Garden",
-  "Theta Reverie", "Alpha Serenity", "Delta Drift",
-  "Brainwave Bouquet", "Mindful Essence", "Cerebral Mist",
-  "Neuron Nectar", "Pulse Petals", "Wave Harmony",
-];
+const PERFUME_NAME = "Alpha State";
 
 /** Simple seeded PRNG (mulberry32) */
 function createRng(seed: number) {
@@ -60,7 +55,7 @@ export async function POST(request: NextRequest) {
   }));
 
   return NextResponse.json({
-    perfume_name: PERFUME_NAMES[Math.floor(rng() * PERFUME_NAMES.length)],
+    perfume_name: PERFUME_NAME,
     ingredients,
   });
 }
